@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meetup Game</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>Canvas Element</h1>
+  <!-- canvas element -->
+  <canvas width="500" height="500"></canvas>
+  <script>
+    // get the element
+    const canvas = document.querySelector('canvas');
+    // get drawing/rendering context
+    const ctx = canvas.getContext('2d');
+
+    // rendering a rect
+    ctx.fillRect(100, 100, 100, 100);
+
+    // changing rendering current color
+    ctx.fillStyle = 'red';
+
+    ctx.fillRect(125, 125, 100, 100);
+  </script>
+</body>
+</html>

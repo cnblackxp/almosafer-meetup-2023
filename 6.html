@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meetup Game</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>Objects</h1>
+  <!-- canvas element -->
+  <canvas width="500" height="400"></canvas>
+
+
+  <script>
+    // get the element
+    const canvas = document.querySelector('canvas');
+    // get drawing/rendering context
+    const ctx = canvas.getContext('2d');
+
+    
+
+    const rectState = {
+      x: 0,
+      y: 0,
+      velocityX: 5,
+      velocityY: 5,
+      // speed which it will move at
+      speed: 5,
+      // size of the rect
+      size: 50,
+      // color index
+      color: 0
+    }
+
+    // colors that we have
+    const colors = [
+      'red',
+      'green',
+      'blue',
+      'black'
+    ]
+
+    // state which is outside the scrope of the rect
+    const gameState = {
+      framesPerSecond: 30
+    }
+
+    console.log(canvas.width, canvas.height);
+
+    setInterval(() => {
+      // we should always clear the canvas to update our screen
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = colors[rectState.color];
+      ctx.fillRect(rectState.x, rectState.y, rectState.size, rectState.size);
+
+      rectState.x += rectState.velocityX;
+      rectState.y += rectState.velocityY;
+
+      if (rectState.x > canvas.width - rectState.size) {
+        rectState.velocityX = -rectState.speed;
+        rectState.color ++;
+      }
+      if (rectState.x < 0) {
+        rectState.velocityX = rectState.speed;
+        rectState.color ++;
+      }
+      if (rectState.y > canvas.height - rectState.size) {
+        rectState.velocityY = -rectState.speed;
+        rectState.color ++;
+      }
+      if (rectState.y < 0) {
+        rectState.velocityY = rectState.speed;
+        rectState.color ++;
+      }
+
+      if (rectState.color >= colors.length) {
+        rectState.color = 0;
+      }
+    }, 1000/gameState.framesPerSecond);
+  </script>
+</body>
+</html>

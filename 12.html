@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meetup Game</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>How will we lose? Enemy</h1>
+  <!-- canvas element -->
+  <canvas width="750" height="400" style="background-color: white;"></canvas>
+
+
+  <script>
+    // get the element
+    const canvas = document.querySelector('canvas');
+    // get drawing/rendering context
+    const ctx = canvas.getContext('2d');
+
+    const mapState = {
+      // our map's data structure
+      map: [
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,3,0],
+        [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1],
+        [0,0,0,0,0,0,0,0,0,0,2,2,2,2,2],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+      ],
+      // tile colors based on the value inside array
+      tileColors: {
+        1: 'green',
+        2: 'brown',
+        3: 'pink'
+      },
+      // size of the tile
+      tileSize: 50,
+      draw() {
+        mapState.handleMapTile((value, y, x) => {
+          if (value) { // if not 0
+              // choose tile color based on map array
+              ctx.fillStyle = mapState.tileColors[value];
+              // setting position based on position in array
+              ctx.fillRect(
+                x * mapState.tileSize,
+                y * mapState.tileSize,
+                mapState.tileSize,
+                mapState.tileSize
+              );
+            }
+        })
+      },
+      handleMapTile(callback) {
+        for (let y = 0; y < mapState.map.length; y ++) {
+          for (let x = 0; x < mapState.map[y].length; x ++) {
+            callback(mapState.map[y][x], y, x);
+          }
+        }
+      }
+    }
+
+
+    const enemyState = {
+      x: 400,
+      y: 250,
+      size: 50,
+      speed: 3,
+      velocityX: 3,
+      draw() {
+        ctx.fillStyle = 'black';
+        ctx.fillRect(enemyState.x, enemyState.y, enemyState.size, enemyState.size);
+      },
+      update() {
+        enemyState.x += enemyState.velocityX;
+        if (enemyState.x >= 500) {
+          enemyState.velocityX = -enemyState.speed;
+        }
+        if (enemyState.x <= 400) {
+          enemyState.velocityX = enemyState.speed;
+        }
+      }
+    }
+
+
+    window.addEventListener('keydown', (e) => {
+      if (e.keyCode === 39) { // right key
+        rectState.velocityX = 5;
+      }
+      if (e.keyCode === 37) { // left key
+        rectState.velocityX = -5;
+      }
+      if (e.keyCode === 38 && !rectState.jumping) {
+        rectState.velocityY = -20;
+        rectState.jumping = true;
+      }
+    });
+    window.addEventListener('keyup', (e) => {
+      // now that we can jump we should stay moving in the air
+      if (e.keyCode === 39 || e.keyCode === 37) {
+        rectState.velocityX = 0;
+      }
+    });
+
+    // CollisionManager
+    const CollisionManager = {
+      collisionPoint(box, point) {
+        // if the point is colliding against the box then we return a true value
+        return (point.x >= box.x && point.x <= box.x + box.width
+            && point.y >= box.y && point.y <= box.y + box.height);
+      }
+    }
+
+    const rectState = {
+      x: 100,
+      y: 200,
+      velocityX: 0,
+      velocityY: 0,
+      jumping: false,
+      speed: 1,
+      size: 50,
+      gravity: 1,
+      color: 'blue',
+      draw() {
+        ctx.fillStyle = rectState.color;
+        ctx.fillRect(rectState.x, rectState.y, rectState.size, rectState.size);
+      },
+      update() {
+        rectState.x += rectState.velocityX;
+        rectState.y += rectState.velocityY;
+
+        // apply gravity
+        rectState.velocityY += rectState.gravity;
+
+
+        mapState.handleMapTile((hasCollision, y, x) => {
+          if (hasCollision && hasCollision !== 3) {
+            const tile = {
+              x: x * mapState.tileSize,
+              y: y * mapState.tileSize,
+              width: mapState.tileSize,
+              height: mapState.tileSize
+            }
+            const rectCollisionPoint = {
+              x: rectState.x + rectState.size/2,
+              y: rectState.y + rectState.size
+            }
+            // when the point of the bottom of the rect collides with the tile
+            // it will trigger the rect to be on the ground
+            if (CollisionManager.collisionPoint(tile, rectCollisionPoint)) {
+              rectState.velocityY = 0;
+              rectState.y = tile.y - rectState.size;
+              rectState.jumping = false;
+            }
+          }
+
+          // win game
+          if (hasCollision === 3) {
+            const tile = {
+              x: x * mapState.tileSize,
+              y: y * mapState.tileSize,
+              width: mapState.tileSize,
+              height: mapState.tileSize
+            }
+            const rectCollisionPoint = {
+              x: rectState.x + rectState.size/2,
+              y: rectState.y + rectState.size/2
+            }
+            if (CollisionManager.collisionPoint(tile, rectCollisionPoint)) {
+              gameState.win = true;
+            }
+          }
+          
+        })
+
+
+
+      }
+    }
+
+
+
+    const gameState = {
+      framesPerSecond: 30,
+      win: false
+    }
+
+
+
+    setInterval(() => {
+      // we should always clear the canvas to update our screen
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0,0,canvas.width, canvas.height);
+
+      if (gameState.win) {
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0,0,canvas.width, canvas.height);
+        ctx.font="30px Arial";
+        ctx.fillStyle = 'white';
+        ctx.fillText('YOU WIN', canvas.width/2, canvas.height/2);
+      } else {
+        // handle drawing/rendering
+        mapState.draw();
+        rectState.draw();
+        enemyState.draw();
+
+
+        // handle updating game state
+        rectState.update();
+        enemyState.update();
+      }
+      
+      
+      
+    }, 1000/gameState.framesPerSecond);
+  </script>
+</body>
+</html>

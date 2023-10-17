@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meetup Game</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>Animating the Canvas</h1>
+  <!-- canvas element -->
+  <canvas width="500" height="500"></canvas>
+
+
+  <script>
+    // get the element
+    const canvas = document.querySelector('canvas');
+    // get drawing/rendering context
+    const ctx = canvas.getContext('2d');
+
+    // creating state
+    let x = 0;
+    let y = 0;
+
+    // animating our game
+    setInterval(() => {
+      ctx.fillRect(x, y, 50, 50);
+
+      // updating the state
+      x += 10;
+      y += 10;
+    // game frames per second
+    }, 1000);
+  </script>
+</body>
+</html>

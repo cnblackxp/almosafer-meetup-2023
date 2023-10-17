@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meetup Game</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>Animating the Canvas - 2</h1>
+  <!-- canvas element -->
+  <canvas width="500" height="500"></canvas>
+
+
+  <script>
+    // get the element
+    const canvas = document.querySelector('canvas');
+    // get drawing/rendering context
+    const ctx = canvas.getContext('2d');
+
+    let x = 0;
+    let y = 0;
+
+    setInterval(() => {
+      // we should always clear the canvas to update our screen
+      ctx.clearRect(0,0,500,500);
+      ctx.fillRect(x, y, 50, 50);
+
+      x ++;
+      y ++;
+      // smooth animations considering what looks pleasing to the eye
+    }, 1000/30);
+  </script>
+</body>
+</html>

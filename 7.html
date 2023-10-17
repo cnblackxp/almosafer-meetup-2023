@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meetup Game</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>Taking Control</h1>
+  <!-- canvas element -->
+  <canvas width="750" height="400"></canvas>
+
+
+  <script>
+    // get the element
+    const canvas = document.querySelector('canvas');
+    // get drawing/rendering context
+    const ctx = canvas.getContext('2d');
+
+
+    window.addEventListener('keydown', (e) => {
+      switch (e.keyCode) {
+        case 39: // right key
+          rectState.velocityX = 5;
+          break;
+        case 37: // left key
+          rectState.velocityX = -5;
+          break;
+      }
+    });
+    window.addEventListener('keyup', (e) => {
+      rectState.velocityX = 0;
+    });
+
+    const rectState = {
+      x: 100,
+      y: 350,
+      velocityX: 0,
+      velocityY: 0,
+      speed: 1,
+      size: 50,
+      color: 'green',
+      draw() {
+        ctx.fillStyle = rectState.color;
+        ctx.fillRect(rectState.x, rectState.y, rectState.size, rectState.size);
+
+      },
+      update() {
+        rectState.x += rectState.velocityX;
+        rectState.y += rectState.velocityY;
+      }
+    }
+
+    const gameState = {
+      framesPerSecond: 30
+    }
+
+    setInterval(() => {
+      // we should always clear the canvas to update our screen
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      
+      // handle drawing/rendering
+      rectState.draw();
+
+
+      // handle updating game state
+      rectState.update();
+    }, 1000/gameState.framesPerSecond);
+  </script>
+</body>
+</html>
