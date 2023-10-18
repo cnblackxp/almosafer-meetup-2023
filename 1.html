@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meetup Game</title>
+  <title>1 - Canvas Element</title>
   <style>
     canvas {
       border: 1px solid black;
@@ -21,10 +21,11 @@
     // get drawing/rendering context
     const ctx = canvas.getContext('2d');
 
-    // rendering a rect
+    // rendering a rect (x position, y position, width, height)
     ctx.fillRect(100, 100, 100, 100);
 
-    // changing rendering current color
+    // changing rendering current color 
+    // the value is css you can basically add hexa as colors or the css color constants
     ctx.fillStyle = 'red';
 
     ctx.fillRect(125, 125, 100, 100);

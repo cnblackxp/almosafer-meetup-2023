@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meetup Game</title>
+  <title>5 - Controling the State</title>
   <style>
     canvas {
       border: 1px solid black;
@@ -25,6 +25,7 @@
 
     let x = 0;
     let y = 0;
+    // the velocity in which the rect is moving at
     let velocityX = 5;
     let velocityY = 5;
 
@@ -36,6 +37,7 @@
       x += velocityX;
       y += velocityY;
 
+      // daynamic movement
       if (x > 450) {
         velocityX = -5;
       }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meetup Game</title>
+  <title>10 - Let's interact with the Map</title>
   <style>
     canvas {
       border: 1px solid black;
@@ -58,6 +58,8 @@
           }
         })
       },
+      // this way any object that wants to interact with the map
+      // can utilize this function
       handleMapTile(callback) {
         for (let y = 0; y < mapState.map.length; y ++) {
           for (let x = 0; x < mapState.map[y].length; x ++) {
